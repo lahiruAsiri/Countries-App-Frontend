@@ -79,11 +79,15 @@ export const addFavorite = async (countryCode) => {
     if (!countryCode || typeof countryCode !== "string") {
       throw new Error("Invalid country code");
     }
-    // Adjust payload based on backend requirements (e.g., { code } or { countryCode })
-    const payload = { countryCode }; // Modify if backend expects { code: countryCode }
+    // Adjust payload based on backend requirements
+    const payload = { countryCode };
     const response = await api.post("/favorites/add", payload);
     return response.data;
   } catch (error) {
+    // Preserve backend error message for 401 to allow FavoritesContext to handle it
+    if (error.response?.status === 401) {
+      throw error; // Let FavoritesContext catch and process
+    }
     throw new Error(error.response?.data?.message || "Failed to add favorite");
   }
 };
