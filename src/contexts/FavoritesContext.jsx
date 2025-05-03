@@ -20,17 +20,41 @@ export const useFavorites = () => {
 export const FavoritesProvider = ({ children }) => {
   const [favorites, setFavorites] = useState([]);
 
-  // Fetch favorites on mount
+  // Function to fetch favorites
+  const fetchFavorites = async () => {
+    try {
+      const favs = await getFavorites();
+      setFavorites(favs || []);
+    } catch (error) {
+      console.error("Failed to fetch favorites:", error);
+      setFavorites([]);
+    }
+  };
+
+  // Function to clear favorites
+  const clearFavorites = () => {
+    setFavorites([]);
+  };
+
+  // Monitor authentication state
   useEffect(() => {
-    const fetchFavorites = async () => {
-      try {
-        const favs = await getFavorites();
-        setFavorites(favs);
-      } catch (error) {
-        console.error("Failed to fetch favorites:", error);
+    const checkToken = () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        fetchFavorites();
+      } else {
+        clearFavorites();
       }
     };
-    fetchFavorites();
+
+    // Initial check
+    checkToken();
+
+    // Listen for storage changes (e.g., token removed in another tab)
+    window.addEventListener("storage", checkToken);
+
+    // Cleanup listener
+    return () => window.removeEventListener("storage", checkToken);
   }, []);
 
   const addFavoriteCountry = async (countryCode) => {
@@ -38,7 +62,10 @@ export const FavoritesProvider = ({ children }) => {
       await addFavorite(countryCode);
       setFavorites((prev) => [...prev, countryCode]);
     } catch (error) {
-      throw new Error("Failed to add favorite");
+      if (error.response?.status === 401) {
+        throw new Error("Please login to add this country to favorites.");
+      }
+      throw new Error("Failed to add favorite: " + error.message);
     }
   };
 
@@ -62,6 +89,8 @@ export const FavoritesProvider = ({ children }) => {
         addFavorite: addFavoriteCountry,
         removeFavorite: removeFavoriteCountry,
         isFavorite,
+        fetchFavorites,
+        clearFavorites,
       }}
     >
       {children}
