@@ -14,6 +14,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useAuth } from "../contexts/AuthContext";
+import { useFavorites } from "../contexts/FavoritesContext";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -22,6 +23,7 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
 
   const { login } = useAuth();
+  const { fetchFavorites } = useFavorites();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -36,6 +38,7 @@ const LoginPage = () => {
       setError(null);
       setLoading(true);
       await login(email, password);
+      await fetchFavorites();
       navigate("/");
     } catch (err) {
       setError("Failed to log in. Please check your credentials.");
