@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect } from "react";
 import { registerUser, loginUser } from "../services/userService";
+import { useFavorites } from "./FavoritesContext";
 
 const AuthContext = createContext(undefined);
 
@@ -16,6 +17,7 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { clearFavorites } = useFavorites(); // Import clearFavorites
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -52,6 +54,7 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+    clearFavorites(); // Clear favorites on logout
   };
 
   const value = {
