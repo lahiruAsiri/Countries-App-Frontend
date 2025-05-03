@@ -77,6 +77,7 @@ const Navbar = () => {
             <ListItemText primary={item.text} />
             {item.text === "Favorites" && favorites.length > 0 && (
               <Box
+                key={favorites.length} // Force re-render on favorites change
                 sx={{
                   bgcolor: "secondary.main",
                   color: "white",
@@ -116,7 +117,7 @@ const Navbar = () => {
     <AppBar
       position="sticky"
       color="default"
-      elevation={1}
+      elevation={0}
       sx={{
         bgcolor: theme.palette.background.default,
         backdropFilter: "blur(10px)",
@@ -183,6 +184,7 @@ const Navbar = () => {
                 {item.text}
                 {item.text === "Favorites" && favorites.length > 0 && (
                   <Box
+                    key={favorites.length} // Force re-render on favorites change
                     sx={{
                       bgcolor: "secondary.main",
                       color: "white",
