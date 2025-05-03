@@ -12,8 +12,8 @@ import { ThemeModeProvider } from "./contexts/ThemeModeContext";
 function App() {
   return (
     <ThemeModeProvider>
-      <AuthProvider>
-        <FavoritesProvider>
+      <FavoritesProvider>
+        <AuthProvider>
           <Router>
             <Navbar />
             <Routes>
@@ -24,8 +24,8 @@ function App() {
               <Route path="/register" element={<RegisterPage />} />
             </Routes>
           </Router>
-        </FavoritesProvider>
-      </AuthProvider>
+        </AuthProvider>
+      </FavoritesProvider>
     </ThemeModeProvider>
   );
 }
