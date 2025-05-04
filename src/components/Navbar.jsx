@@ -125,7 +125,7 @@ const Navbar = () => {
     >
       <Toolbar>
         <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
-          <PublicIcon sx={{ mr: 1, color: "primary.main" }} />
+          {/* <PublicIcon sx={{ mr: 1, color: "primary.main" }} /> */}
           <Typography
             variant="h6"
             component={RouterLink}
@@ -136,7 +136,7 @@ const Navbar = () => {
               textDecoration: "none",
             }}
           >
-            Country Explorer
+            World Nations
           </Typography>
         </Box>
 
